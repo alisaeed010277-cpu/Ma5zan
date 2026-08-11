@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="أمين المخزن">
+<meta name="theme-color" content="#1A5276">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>أمين المخزن</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;direction:rtl;background:#F0F4F8;color:#1C2833;font-size:14px;min-height:100vh;font-feature-settings:"lnum";}
+input,select,td,th,.sum-num,.list-item-bal-num{font-feature-settings:"lnum";}
+input[type=date],input[type=number]{direction:ltr;text-align:right;}
+input,select,button{font-family:inherit;font-size:14px;}
+input:focus,select:focus{outline:2px solid #2E86C1;}
+.header{background:#1A5276;color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,.2);position:sticky;top:0;z-index:100;}
+.header-title{font-size:17px;font-weight:bold;}
+.header-sub{font-size:11px;opacity:.75;margin-top:2px;}
+.header-date{font-size:11px;opacity:.7;}
+.watermark{text-align:center;padding:3px;font-size:10px;color:#aaa;background:#fff;border-top:1px solid #eee;position:fixed;bottom:0;left:0;right:0;z-index:200;pointer-events:none;user-select:none;}
+.whatsapp-float{position:fixed;bottom:34px;left:16px;height:48px;background:#25D366;border-radius:30px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px 0 12px;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:300;cursor:pointer;border:none;}
+.whatsapp-float:active{transform:scale(.95);}
+.whatsapp-float svg{width:26px;height:26px;flex-shrink:0;}
+.whatsapp-float span{color:#fff;font-size:13px;font-weight:bold;white-space:nowrap;}
+.tabs{display:flex;background:#fff;border-bottom:2px solid #D5D8DC;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;top:56px;z-index:99;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:10px 13px;cursor:pointer;font-size:12px;font-weight:normal;color:#717D7E;border:none;border-bottom:3px solid transparent;white-space:nowrap;background:none;flex-shrink:0;}
+.tab.active{color:#2E86C1;font-weight:bold;border-bottom-color:#2E86C1;}
+.body{padding:12px;max-width:700px;margin:0 auto;padding-bottom:50px;}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:12px;overflow:hidden;}
+.card-head{background:#1A5276;color:#fff;padding:10px 14px;font-size:14px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;}
+.card-head.green{background:#1E8449;}
+.card-head.orange{background:#D68910;}
+.card-body{padding:14px;}
+.summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.sum-card{flex:1;min-width:130px;border-radius:10px;padding:12px 14px;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.12);}
+.sum-card.blue{background:#1A5276;}
+.sum-card.red{background:#C0392B;}
+.sum-card.green{background:#1E8449;}
+.sum-card.orange{background:#D68910;}
+.sum-num{font-size:20px;font-weight:bold;margin-bottom:2px;}
+.sum-lbl{font-size:11px;opacity:.85;}
+.form-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+.form-group{flex:1;min-width:120px;}
+.lbl{font-size:12px;color:#717D7E;margin-bottom:3px;}
+input[type=text],input[type=number],input[type=date],input[type=month],select,input[type=tel]{border:1px solid #D5D8DC;border-radius:6px;padding:8px 10px;width:100%;background:#FDFEFE;color:#1C2833;direction:rtl;}
+.btn{border:none;border-radius:6px;padding:9px 14px;font-size:13px;cursor:pointer;font-weight:bold;white-space:nowrap;color:#fff;}
+.btn.blue{background:#1A5276;}
+.btn.green{background:#1E8449;}
+.btn.red{background:#C0392B;}
+.btn.gray{background:#717D7E;}
+.btn.orange{background:#D68910;}
+.btn.purple{background:#7D3C98;}
+.btn-outline{background:none;color:#1A5276;border:1px solid #1A5276;border-radius:6px;padding:8px 14px;font-size:13px;cursor:pointer;font-weight:bold;}
+.btn-sm{border:none;border-radius:5px;padding:5px 10px;font-size:12px;cursor:pointer;font-weight:bold;color:#fff;}
+.btn-sm.blue{background:#2E86C1;}
+.btn-sm.red{background:#C0392B;}
+.btn-sm.green{background:#1E8449;}
+.btn-sm.purple{background:#7D3C98;}
+.btn-sm.orange{background:#D68910;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:#1A5276;color:#fff;padding:8px 10px;text-align:right;font-size:12px;}
+td{padding:7px 10px;border-bottom:1px solid #D5D8DC;vertical-align:middle;}
+tr:nth-child(even) td{background:#F2F3F4;}
+tr:nth-child(odd) td{background:#FDFEFE;}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.badge{display:inline-block;border-radius:12px;padding:2px 8px;font-size:11px;font-weight:bold;}
+.badge.red{background:#F9EBEA;color:#C0392B;}
+.badge.green{background:#E9F7EF;color:#1E8449;}
+.badge.orange{background:#FEF9E7;color:#D68910;}
+.badge.blue{background:#EBF5FB;color:#2E86C1;}
+.list-item{background:#fff;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:8px;overflow:hidden;}
+.list-item-head{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;}
+.list-item-name{font-weight:bold;font-size:15px;}
+.list-item-sub{font-size:12px;color:#717D7E;margin-top:2px;}
+.list-item-actions{padding:4px 14px 10px;display:flex;gap:6px;flex-wrap:wrap;}
+.list-item-bal{text-align:center;}
+.list-item-bal-num{font-weight:bold;font-size:15px;}
+.list-item-bal-lbl{font-size:11px;color:#717D7E;}
+.divider{border-top:1px solid #D5D8DC;margin:10px 0;}
+.empty{text-align:center;color:#717D7E;padding:30px 0;font-size:13px;}
+.back-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.page-title{font-weight:bold;font-size:16px;}
+.section-title{font-weight:bold;margin-bottom:8px;font-size:13px;}
+.line-box{background:#F0F4F8;border-radius:8px;padding:10px;margin-bottom:8px;}
+.search-row{display:flex;gap:8px;margin-bottom:10px;}
+.ssel-wrap{position:relative;}
+.ssel-input{width:100%;border:1px solid #D5D8DC;border-radius:6px;padding:8px 10px;box-sizing:border-box;font-size:14px;}
+.ssel-list{display:none;position:absolute;z-index:60;background:#fff;border:1px solid #D5D8DC;border-radius:8px;max-height:230px;overflow-y:auto;width:100%;box-shadow:0 4px 16px rgba(0,0,0,.18);margin-top:2px;}
+.ssel-item{padding:10px 12px;border-bottom:1px solid #F2F3F4;cursor:pointer;font-size:14px;}
+.ssel-item:last-child{border-bottom:none;}
+.ssel-item:active,.ssel-item.hover{background:#EBF5FB;}
+.ssel-item .sub{font-size:11px;color:#717D7E;margin-top:2px;}
+.ssel-empty{padding:12px;text-align:center;color:#717D7E;font-size:13px;}
+.sub-tabs{display:flex;gap:8px;margin-bottom:12px;}
+
+/* SPLASH SCREEN */
+#splashScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#1A5276,#1E8449);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:fadeOut .6s ease forwards;animation-delay:2s;color:#fff;padding:20px;}
+#splashScreen .splash-icon{font-size:60px;margin-bottom:14px;animation:popIn .5s ease;}
+#splashScreen .splash-title{font-size:20px;font-weight:bold;margin-bottom:6px;animation:slideUp .5s ease .15s both;}
+#splashScreen .splash-sub{font-size:13px;opacity:.85;margin-bottom:28px;animation:slideUp .5s ease .25s both;}
+#splashScreen .splash-dev{font-size:14px;font-weight:bold;animation:slideUp .5s ease .35s both;}
+#splashScreen .splash-phone{font-size:13px;opacity:.9;margin-top:4px;animation:slideUp .5s ease .45s both;}
+#splashScreen .splash-line{width:50px;height:3px;background:#fff;opacity:.5;border-radius:3px;margin:16px 0;animation:slideUp .5s ease .3s both;}
+@keyframes popIn{from{transform:scale(.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+@keyframes slideUp{from{transform:translateY(15px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+@keyframes fadeOut{to{opacity:0;visibility:hidden;}}
+</style>
+</head>
+<body>
+
+<div id="splashScreen">
+  <div class="splash-icon"><svg width="70" height="70" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#F39C12"/></linearGradient></defs><circle cx="35" cy="35" r="35" fill="url(#g1)"/><text x="35" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#1A5276" letter-spacing="1">أم</text></svg></div>
+  <div class="splash-title">أمين المخزن</div>
+  <div class="splash-sub">إدارة حركة الوارد والصادر بالمخزن</div>
+  <div class="splash-line"></div>
+  <div class="splash-dev">Ali Saeed (ElNokhba)</div>
+  <div class="splash-phone">📞 01552623744</div>
+</div>
+
+<div class="header">
+  <div>
+    <div class="header-title"><svg width="26" height="26" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-left:6px"><defs><linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#F39C12"/></linearGradient></defs><circle cx="35" cy="35" r="35" fill="url(#g2)"/><text x="35" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#1A5276" letter-spacing="1">أم</text></svg> أمين المخزن</div>
+    <div class="header-sub">إدارة حركة الوارد والصادر بالمخزن</div>
+    <div id="companyBar" style="margin-top:3px"></div>
+    <div id="warehouseBar" style="margin-top:3px"></div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+    <div class="header-date" id="todayDate"></div>
+    <div style="display:flex;gap:6px">
+      <button onclick="exportData()" style="background:#27AE60;color:#fff;border:none;border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer">💾 تصدير</button>
+      <button onclick="importData()" style="background:#D68910;color:#fff;border:none;border-radius:5px;padding:4px 8px;font-size:11px;cursor:pointer">📂 استيراد</button>
+    </div>
+  </div>
+</div>
+
+<div id="exportReminder" style="display:none;background:#FCF3CF;border-bottom:2px solid #F1C40F;padding:8px 12px;align-items:center;justify-content:space-between;gap:8px;font-size:12px;">
+  <span class="reminder-text" style="color:#7D6608;flex:1"></span>
+  <div style="display:flex;gap:6px">
+    <button onclick="exportData()" style="background:#27AE60;color:#fff;border:none;border-radius:5px;padding:4px 10px;font-size:11px;cursor:pointer;white-space:nowrap">تصدير الآن</button>
+    <button onclick="hideExportReminder()" style="background:none;border:none;color:#7D6608;font-size:14px;cursor:pointer;padding:0 4px">✕</button>
+  </div>
+</div>
+
+<div id="exportModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:12px;padding:20px;max-width:340px;width:100%;text-align:center">
+    <div style="font-size:16px;font-weight:bold;color:#1A5276;margin-bottom:4px">💾 تصدير النسخة الاحتياطية</div>
+    <div style="font-size:12px;color:#717D7E;margin-bottom:16px">اختار طريقة الحفظ</div>
+    <button onclick="doExportDevice()" style="width:100%;background:#2E86C1;color:#fff;border:none;border-radius:8px;padding:12px;font-size:13px;font-weight:bold;cursor:pointer;margin-bottom:8px">📱 حفظ على الجهاز</button>
+    <button onclick="doExportShare()" style="width:100%;background:#27AE60;color:#fff;border:none;border-radius:8px;padding:12px;font-size:13px;font-weight:bold;cursor:pointer;margin-bottom:8px">📤 مشاركة (جوجل درايف / جيميل / واتساب...)</button>
+    <button onclick="document.getElementById('exportModal').style.display='none'" style="width:100%;background:#ECF0F1;color:#717D7E;border:none;border-radius:8px;padding:10px;font-size:13px;cursor:pointer">إلغاء</button>
+  </div>
+</div>
+
+<div class="tabs" id="tabsBar"></div>
+
+<div class="body">
+  <div id="tab-home"></div>
+  <div id="tab-stock" style="display:none"></div>
+</div>
+
+<!-- زر التواصل السريع (واتساب) -->
+<button class="whatsapp-float" onclick="window.open('https://wa.me/201552623744?text=' + encodeURIComponent('مرحباً، أحتاج مساعدة بخصوص تطبيق أمين المخزن'), '_blank')" title="تواصل واتساب" aria-label="تواصل واتساب">
+  <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.001 2C6.478 2 2 6.478 2 12c0 1.85.502 3.585 1.376 5.073L2 22l5.06-1.352A9.94 9.94 0 0 0 12 22c5.523 0 10-4.478 10-10S17.523 2 12.001 2zm0 18.2c-1.618 0-3.132-.44-4.43-1.203l-.318-.19-3.006.803.803-2.93-.207-.328A8.17 8.17 0 0 1 3.8 12c0-4.53 3.671-8.2 8.2-8.2s8.2 3.67 8.2 8.2-3.671 8.2-8.199 8.2z"/></svg>
+  <span>التواصل للمساعدة</span>
+</button>
+
+<!-- WATERMARK - ثابت لا يمكن حذفه -->
+<div class="watermark">Developed by: Ali Saeed (ElNokhba) — 01552623744</div>
+
+<script>
+// ============================================================
+// IndexedDB wrapper — بيستحمل جيجابايت بدل 5MB
+// ملاحظة: اسم قاعدة البيانات ومفاتيح الـ localStorage كلها بادئة "am_" (أمين المخزن)
+// عشان لو اتنصب على نفس دومين GitHub Pages بتاع تطبيقات علي التانية، تفضل بياناتهم منفصلة تمامًا ومفيش أي تعارض
+// ============================================================
+const DB_NAME='ameenMakhzanApp';const DB_VER=1;const STORE='kvStore';
+let _idb=null;
+
+function openIDB(){
+  return new Promise((res,rej)=>{
+    if(_idb){res(_idb);return;}
+    const req=indexedDB.open(DB_NAME,DB_VER);
+    req.onupgradeneeded=e=>{e.target.result.createObjectStore(STORE,{keyPath:'k'});};
+    req.onsuccess=e=>{_idb=e.target.result;res(_idb);};
+    req.onerror=e=>rej(e);
+  });
+}
+function idbGet(key){
+  return openIDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction(STORE,'readonly');
+    const req=tx.objectStore(STORE).get(key);
+    req.onsuccess=()=>res(req.result?req.result.v:null);
+    req.onerror=e=>rej(e);
+  }));
+}
+function idbSet(key,val){
+  return openIDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction(STORE,'readwrite');
+    tx.objectStore(STORE).put({k:key,v:val});
+    tx.oncomplete=()=>res();
+    tx.onerror=e=>rej(e);
+  }));
+}
+
+// للتفعيل والإعدادات — بيفضل localStorage (بيانات صغيرة جداً)
+const DB={
+  get:(k)=>{try{return JSON.parse(localStorage.getItem(k)||'null');}catch{return null;}},
+  set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+};
+
+const KEYS={warehouses:'am_warehouses',companyProfile:'am_companyProfile'};
+
+// البيانات الرئيسية: كل مخزن عنده أصنافه وحركاته الخاصة بيه بالكامل (منفصلة تمامًا عن أي مخزن تاني)
+let warehouses=[]; // [{id,name,products:[],movements:[]}]
+let currentWarehouseId=null;
+let companyProfile={name:'',phone:''};
+
+function currentWarehouse(){
+  return warehouses.find(w=>w.id===currentWarehouseId) || warehouses[0] || null;
+}
+
+// بتضيف اسم الشركة (لو متسجل) لاسم ملف الباك أب، عشان تقدر تميّز بين نسخ احتياطية من أكثر من نسخة تطبيق على نفس الجهاز
+function backupFileLabel(){
+  const name=(companyProfile.name||'').trim();
+  if(!name) return '';
+  const clean=name.replace(/[\\/:*?"<>|]/g,'').replace(/\s+/g,'_');
+  return clean?('_'+clean):'';
+}
+
+// دالة عامة: تحدّث متغير بحث وتعيد الرسم، مع الحفاظ على التركيز ومكان المؤشر بالكيبورد
+function searchInputHandler(el, setter, renderFn){
+  setter(el.value);
+  const pos=el.selectionStart;
+  const id=el.id;
+  renderFn();
+  const ne=document.getElementById(id);
+  if(ne){ ne.focus(); try{ ne.setSelectionRange(pos,pos); }catch(e){} }
+}
+
+// ====== مكوّن قائمة بحث قابلة لإعادة الاستخدام (searchable select) ======
+let _sselData={};
+function searchableSelectHtml(fieldId, options, placeholder, selectedId, onPickExtra){
+  _sselData[fieldId]={options, onPickExtra: onPickExtra||''};
+  const sel=options.find(o=>o.id===selectedId);
+  return `<div class="ssel-wrap">
+    <input type="text" class="ssel-input" id="${fieldId}_search" placeholder="${placeholder}" autocomplete="off"
+      value="${sel?sel.label.replace(/"/g,'&quot;'):''}"
+      oninput="_sselFilter('${fieldId}')" onfocus="_sselFilter('${fieldId}')"
+      onblur="setTimeout(()=>{const l=document.getElementById('${fieldId}_list');if(l)l.style.display='none';},200)">
+    <input type="hidden" id="${fieldId}" value="${selectedId||''}">
+    <div class="ssel-list" id="${fieldId}_list"></div>
+  </div>`;
+}
+function _sselFilter(fieldId){
+  const data=_sselData[fieldId];
+  if(!data)return;
+  const q=(document.getElementById(fieldId+'_search')?.value||'').trim();
+  const list=document.getElementById(fieldId+'_list');
+  if(!list)return;
+  const matches=q?data.options.filter(o=>o.label.includes(q)):data.options;
+  if(matches.length===0){
+    list.innerHTML=`<div class="ssel-empty">لا توجد نتائج</div>`;
+  }else{
+    list.innerHTML=matches.slice(0,100).map(o=>`<div class="ssel-item" onmousedown="_sselPick('${fieldId}','${o.id}')"><div>${o.label}</div>${o.sub?`<div class="sub">${o.sub}</div>`:''}</div>`).join('');
+  }
+  list.style.display='block';
+}
+function _sselPick(fieldId, optId){
+  const data=_sselData[fieldId];
+  if(!data)return;
+  const opt=data.options.find(o=>o.id===optId);
+  if(!opt)return;
+  const hidden=document.getElementById(fieldId);
+  const search=document.getElementById(fieldId+'_search');
+  const list=document.getElementById(fieldId+'_list');
+  if(hidden)hidden.value=opt.id;
+  if(search)search.value=opt.label;
+  if(list)list.style.display='none';
+  if(data.onPickExtra)(new Function(data.onPickExtra))();
+}
+
+// حفظ async في IndexedDB
+const save=()=>{
+  idbSet(KEYS.warehouses,warehouses);
+  idbSet(KEYS.companyProfile,companyProfile);
+  DB.set('am_currentWarehouseId', currentWarehouseId);
+};
+
+async function loadAllData(){
+  const [w,comp]=await Promise.all([idbGet(KEYS.warehouses), idbGet(KEYS.companyProfile)]);
+  warehouses = Array.isArray(w) && w.length>0 ? w : [];
+  companyProfile = comp || {name:'',phone:''};
+  if(warehouses.length===0){
+    // أول تشغيل: نجهز مخزن افتراضي واحد
+    warehouses=[{id:uid(),name:'المخزن الرئيسي',products:[],movements:[]}];
+  }
+  const savedCurrent=DB.get('am_currentWarehouseId');
+  currentWarehouseId = savedCurrent && warehouses.some(x=>x.id===savedCurrent) ? savedCurrent : warehouses[0].id;
+  save();
+}
+
+let _id=Date.now();
+const uid=()=>(++_id).toString(36);
+const today=()=>new Date().toISOString().slice(0,10);
+
+const stockQty=(pid)=>{
+  const wh=currentWarehouse();
+  if(!wh) return 0;
+  return wh.movements.filter(m=>m.productId===pid).reduce((s,m)=>m.type==='in'?s+m.qty:s-m.qty,0);
+};
+const stockQtyFor=(wh,pid)=>wh.movements.filter(m=>m.productId===pid).reduce((s,m)=>m.type==='in'?s+m.qty:s-m.qty,0);
+// بيجيب الكميات مقسمة على تواريخ الصلاحية
+const stockBatches=(pid)=>{
+  const wh=currentWarehouse();
+  if(!wh) return [];
+  const batches={};
+  wh.movements.filter(m=>m.productId===pid).forEach(m=>{
+    const key=m.expiry||'—';
+    if(!batches[key]) batches[key]=0;
+    batches[key]+=m.type==='in'?m.qty:-m.qty;
+  });
+  return Object.entries(batches).filter(([k,v])=>v>0).sort((a,b)=>a[0].localeCompare(b[0]));
+};
+// نص عرض "الجهة" (من/لـ) لحركة معينة — بيرجع اسم الجهة النصية أو اسم المخزن الآخر (أو تنويه لو المخزن ده اتحذف بعدين)
+function partyDisplay(party){
+  if(!party) return '—';
+  if(party.mode==='text') return party.text||'—';
+  if(party.mode==='warehouse'){
+    const w=warehouses.find(x=>x.id===party.warehouseId);
+    return w ? ('📦 '+w.name) : '📦 (مخزن محذوف)';
+  }
+  return '—';
+}
+
+function updateHeaderDate(){
+  document.getElementById('todayDate').textContent=today();
+}
+updateHeaderDate();
+setInterval(updateHeaderDate, 60000);
+
+let currentTab='home';
+const TAB_DEFS=[
+  {id:'home',icon:'🏠',label:'الرئيسية'},
+  {id:'stock',icon:'📦',label:'المخزن'}
+];
+function renderTabsBar(){
+  const bar=document.getElementById('tabsBar');
+  if(!bar)return;
+  bar.innerHTML=TAB_DEFS.map(t=>`<button class="tab${t.id===currentTab?' active':''}" data-tab="${t.id}" onclick="switchTab('${t.id}')">${t.icon} ${t.label}</button>`).join('');
+}
+function switchTab(name){
+  currentTab=name;
+  document.querySelectorAll('.tab').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.tab===name);
+  });
+  TAB_DEFS.forEach(t=>{
+    const el=document.getElementById('tab-'+t.id);
+    if(el) el.style.display=t.id===name?'':'none';
+  });
+  renderTabsBar();
+  render();
+}
+function render(){
+  if(currentTab==='home')renderHome();
+  else if(currentTab==='stock')renderStock();
+}
+
+// ===== بيانات الشركة (بتظهر في الهيدر وفي كل ملفات الـ PDF) =====
+function renderCompanyBar(){
+  const bar=document.getElementById('companyBar');
+  if(!bar)return;
+  if(companyProfile.name){
+    bar.innerHTML=`
+      <div onclick="openCompanyModal()" style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;opacity:.9">
+        ${companyProfile.logo?`<img src="${companyProfile.logo}" style="width:18px;height:18px;border-radius:4px;object-fit:cover">`:''}
+        <span><strong>${companyProfile.name}</strong>${companyProfile.phone?' — '+companyProfile.phone:''} ✏️</span>
+      </div>`;
+  }else{
+    bar.innerHTML=`<div onclick="openCompanyModal()" style="cursor:pointer;font-size:11px;opacity:.85;text-decoration:underline">+ أضف بيانات شركتك</div>`;
+  }
+}
+
+let _tempLogoDataUrl=null;
+
+function openCompanyModal(){
+  _tempLogoDataUrl=companyProfile.logo||null;
+  const modal=document.createElement('div');
+  modal.id='companyModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modal.innerHTML=`
+    <div style="background:#fff;border-radius:14px;padding:22px;max-width:320px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3)">
+      <div style="font-size:16px;font-weight:bold;color:#1A5276;margin-bottom:14px;text-align:center">🏢 بيانات شركتك</div>
+      <div style="text-align:center;margin-bottom:12px">
+        <img id="logoPreview" src="${companyProfile.logo||''}" style="width:60px;height:60px;border-radius:10px;object-fit:cover;background:#F2F3F4;display:${companyProfile.logo?'inline-block':'none'}">
+      </div>
+      <label style="display:block;background:#EBF5FB;color:#1A5276;border:1px dashed #1A5276;border-radius:8px;padding:10px;text-align:center;font-size:13px;cursor:pointer;margin-bottom:10px">
+        🖼️ اختيار شعار (اختياري)
+        <input type="file" accept="image/*" style="display:none" onchange="_handleLogoUpload(this)">
+      </label>
+      ${companyProfile.logo?`<div onclick="_removeLogo()" style="text-align:center;font-size:11px;color:#C0392B;cursor:pointer;margin-bottom:10px">🗑 حذف الشعار</div>`:''}
+      <input id="companyNameInput" type="text" placeholder="اسم الشركة / النشاط" value="${companyProfile.name||''}" style="width:100%;padding:10px;border:1px solid #D5D8DC;border-radius:8px;margin-bottom:10px;font-size:14px;box-sizing:border-box">
+      <input id="companyPhoneInput" type="text" placeholder="رقم تليفون الشركة (اختياري)" value="${companyProfile.phone||''}" style="width:100%;padding:10px;border:1px solid #D5D8DC;border-radius:8px;margin-bottom:16px;font-size:14px;box-sizing:border-box;direction:ltr;text-align:right">
+      <div style="display:flex;gap:8px">
+        <button onclick="document.getElementById('companyModal').remove()" style="flex:1;background:#EAECEE;color:#333;border:none;border-radius:8px;padding:12px;font-size:14px;cursor:pointer">إلغاء</button>
+        <button onclick="saveCompanyProfile()" style="flex:1;background:#1A5276;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer">حفظ</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function _handleLogoUpload(input){
+  const file=input.files && input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    const img=new Image();
+    img.onload=function(){
+      const maxSize=150;
+      let w=img.width, h=img.height;
+      if(w>h){ if(w>maxSize){h=Math.round(h*maxSize/w); w=maxSize;} }
+      else{ if(h>maxSize){w=Math.round(w*maxSize/h); h=maxSize;} }
+      const canvas=document.createElement('canvas');
+      canvas.width=w; canvas.height=h;
+      const ctx=canvas.getContext('2d');
+      ctx.drawImage(img,0,0,w,h);
+      _tempLogoDataUrl=canvas.toDataURL('image/jpeg',0.85);
+      const prev=document.getElementById('logoPreview');
+      if(prev){ prev.src=_tempLogoDataUrl; prev.style.display='inline-block'; }
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function _removeLogo(){
+  _tempLogoDataUrl=null;
+  const modal=document.getElementById('companyModal');
+  if(modal){ modal.remove(); openCompanyModal(); }
+}
+
+function saveCompanyProfile(){
+  const name=document.getElementById('companyNameInput').value.trim();
+  const phone=document.getElementById('companyPhoneInput').value.trim();
+  companyProfile={name, phone, logo:_tempLogoDataUrl||''};
+  idbSet(KEYS.companyProfile, companyProfile);
+  document.getElementById('companyModal').remove();
+  renderCompanyBar();
+}
+
+// ===== إدارة المخازن: كل مخزن مستقل تمامًا بأصنافه وحركاته =====
+function renderWarehouseBar(){
+  const bar=document.getElementById('warehouseBar');
+  if(!bar)return;
+  const wh=currentWarehouse();
+  bar.innerHTML=`<div onclick="openWarehouseModal()" style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;opacity:.9">
+    <span>📦 <strong>${wh?wh.name:'—'}</strong>${warehouses.length>1?' 🔀':''} ✏️</span>
+  </div>`;
+}
+
+function openWarehouseModal(){
+  const modal=document.createElement('div');
+  modal.id='warehouseModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const rows=warehouses.map(w=>{
+    const isCurrent=w.id===currentWarehouseId;
+    return `<div style="display:flex;align-items:center;gap:6px;padding:10px 4px;border-bottom:1px solid #F2F3F4">
+      <div style="flex:1;font-weight:${isCurrent?'bold':'normal'};color:${isCurrent?'#1A5276':'#1C2833'};font-size:13px">
+        ${isCurrent?'✅ ':'📦 '}${w.name}
+      </div>
+      ${!isCurrent?`<button class="btn-sm blue" onclick="switchWarehouse('${w.id}')">تحويل له</button>`:''}
+      <button class="btn-sm orange" onclick="renameWarehousePrompt('${w.id}')">✏️</button>
+      ${warehouses.length>1?`<button class="btn-sm red" onclick="deleteWarehouse('${w.id}')">🗑</button>`:''}
+    </div>`;
+  }).join('');
+  modal.innerHTML=`
+    <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.3)">
+      <div style="font-size:16px;font-weight:bold;color:#1A5276;margin-bottom:4px;text-align:center">📦 المخازن</div>
+      <div style="font-size:12px;color:#717D7E;margin-bottom:14px;text-align:center">كل مخزن له أصنافه وحركاته الخاصة بيه لوحده</div>
+      ${rows}
+      <div style="margin-top:14px">
+        <input id="newWarehouseName" type="text" placeholder="اسم المخزن الجديد" style="width:100%;padding:10px;border:1px solid #D5D8DC;border-radius:8px;margin-bottom:8px;font-size:14px;box-sizing:border-box">
+        <button class="btn green" style="width:100%" onclick="addWarehouse()">+ إضافة مخزن جديد</button>
+      </div>
+      <button class="btn-outline" style="width:100%;margin-top:10px" onclick="document.getElementById('warehouseModal').remove()">إغلاق</button>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function addWarehouse(){
+  const name=document.getElementById('newWarehouseName')?.value.trim();
+  if(!name){alert('أدخل اسم المخزن');return;}
+  const w={id:uid(),name,products:[],movements:[]};
+  warehouses.push(w);
+  currentWarehouseId=w.id;
+  save();
+  document.getElementById('warehouseModal')?.remove();
+  stockDetailId=null; showProductForm=false; showMovForm=false; editProductId=null; stockListSearch='';
+  renderWarehouseBar(); renderTabsBar(); render();
+}
+
+function switchWarehouse(id){
+  currentWarehouseId=id;
+  save();
+  document.getElementById('warehouseModal')?.remove();
+  stockDetailId=null; showProductForm=false; showMovForm=false; editProductId=null; stockListSearch='';
+  renderWarehouseBar(); render();
+}
+
+function renameWarehousePrompt(id){
+  const w=warehouses.find(x=>x.id===id);
+  if(!w) return;
+  document.getElementById('warehouseModal')?.remove();
+  const modal=document.createElement('div');
+  modal.id='renameWhModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  modal.innerHTML=`
+    <div style="background:#fff;border-radius:14px;padding:22px;max-width:300px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.3)">
+      <div style="font-size:15px;font-weight:bold;color:#1A5276;margin-bottom:14px;text-align:center">✏️ تعديل اسم المخزن</div>
+      <input id="renameWhInput" type="text" value="${w.name.replace(/"/g,'&quot;')}" style="width:100%;padding:10px;border:1px solid #D5D8DC;border-radius:8px;margin-bottom:16px;font-size:14px;box-sizing:border-box">
+      <div style="display:flex;gap:8px">
+        <button onclick="document.getElementById('renameWhModal').remove();openWarehouseModal()" style="flex:1;background:#EAECEE;color:#333;border:none;border-radius:8px;padding:12px;font-size:14px;cursor:pointer">إلغاء</button>
+        <button onclick="saveWarehouseRename('${id}')" style="flex:1;background:#1A5276;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:bold;cursor:pointer">حفظ</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function saveWarehouseRename(id){
+  const w=warehouses.find(x=>x.id===id);
+  const name=document.getElementById('renameWhInput')?.value.trim();
+  if(!w||!name)return;
+  w.name=name;
+  save();
+  document.getElementById('renameWhModal')?.remove();
+  renderWarehouseBar(); render();
+}
+
+function deleteWarehouse(id){
+  if(warehouses.length<=1){alert('لازم يفضل مخزن واحد على الأقل');return;}
+  const w=warehouses.find(x=>x.id===id);
+  if(!w) return;
+  if(!confirm('هتحذف مخزن "'+w.name+'" وكل أصنافه وحركاته نهائيًا. أي عمليات نقل مرتبطة بيه من مخازن تانية هتفضل موجودة بس هتتوضح إن المخزن ده اتحذف. متأكد؟')) return;
+  warehouses=warehouses.filter(x=>x.id!==id);
+  if(currentWarehouseId===id) currentWarehouseId=warehouses[0].id;
+  save();
+  document.getElementById('warehouseModal')?.remove();
+  stockDetailId=null; showProductForm=false; showMovForm=false; editProductId=null; stockListSearch='';
+  renderWarehouseBar(); renderTabsBar(); render();
+}
+
+// ===== توليد PDF ومشاركته مباشرة (بدون أي مكتبات خارجية — يفضل البرنامج شغال أوفلاين بالكامل) =====
+
+const A4_WIDTH_PX = 794;
+const A4_HEIGHT_PX = 1123;
+
+const DOC_STYLE = `
+  *{box-sizing:border-box;margin:0;padding:0;}
+  @page{size:A4;margin:12mm;}
+  .doc-wrap{font-family:'Segoe UI',Tahoma,Arial,sans-serif;direction:rtl;color:#1C2833;background:#fff;padding:24px;display:flex;flex-direction:column;min-height:${A4_HEIGHT_PX}px;}
+  body{padding:24px;}
+  .doc-header{display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #1A5276;padding-bottom:14px;margin-bottom:18px;}
+  .doc-header-left{display:flex;align-items:center;gap:12px;}
+  .doc-title{font-size:20px;font-weight:bold;color:#1A5276;}
+  .doc-meta{text-align:left;font-size:12px;color:#717D7E;}
+  .doc-info{margin-bottom:16px;font-size:14px;}
+  .doc-info div{margin-bottom:4px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;}
+  th{background:#1A5276;color:#fff;padding:8px 10px;text-align:right;font-size:12px;}
+  td{padding:7px 10px;border-bottom:1px solid #D5D8DC;}
+  tr:nth-child(even) td{background:#F2F3F4;}
+  .doc-total{text-align:left;font-weight:bold;font-size:16px;color:#1A5276;margin-top:6px;}
+  .doc-summary{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+  .doc-sum-box{flex:1;min-width:120px;border:1px solid #D5D8DC;border-radius:8px;padding:10px 12px;text-align:center;}
+  .doc-sum-box .n{font-size:16px;font-weight:bold;color:#1A5276;}
+  .doc-sum-box .l{font-size:11px;color:#717D7E;margin-top:2px;}
+  .doc-signature{margin-top:auto;padding-top:40px;text-align:right;}
+  .doc-signature .lbl{font-size:13px;font-weight:bold;margin-bottom:34px;}
+  .doc-signature .line{width:200px;margin-right:0;margin-left:auto;border-top:1px dotted #717D7E;}
+  .doc-footer{text-align:center;font-size:10px;color:#aaa;border-top:1px solid #eee;padding-top:10px;margin-top:24px;}
+`;
+
+function buildDocInnerHtml(title, bodyHtml, logoSvg){
+  const smallAppLogo = `<svg width="14" height="14" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle"><defs><linearGradient id="pgf" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#F39C12"/></linearGradient></defs><circle cx="35" cy="35" r="35" fill="url(#pgf)"/><text x="35" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#1A5276" letter-spacing="1">أم</text></svg>`;
+  const companyBlock = companyProfile.name ? `
+      <div style="text-align:right">
+        <div class="doc-title">${companyProfile.name}</div>
+        ${companyProfile.phone?`<div style="font-size:12px;color:#717D7E;margin-top:2px">${companyProfile.phone}</div>`:''}
+      </div>` : `<div class="doc-title">أمين المخزن</div>`;
+  return `<div class="doc-header">
+      <div class="doc-header-left">${companyProfile.logo?`<img src="${companyProfile.logo}" style="width:50px;height:50px;border-radius:8px;object-fit:cover">`:''}${companyBlock}</div>
+      <div class="doc-meta">${title}</div>
+    </div>
+    ${bodyHtml}
+    <div class="doc-footer" style="display:flex;align-items:center;gap:5px;justify-content:flex-start;direction:ltr;text-align:left">
+      ${smallAppLogo}<span>أمين المخزن — Developed by: Ali Saeed (ElNokhba) — 01552623744</span>
+    </div>`;
+}
+
+// نافذة طباعة تقليدية — تُستخدم فقط كـ fallback لو المشاركة المباشرة مش مدعومة على الجهاز
+function printDocument(title, bodyHtml){
+  const logoSvg = `<svg width="60" height="60" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="pg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#F39C12"/></linearGradient></defs><circle cx="35" cy="35" r="35" fill="url(#pg1)"/><text x="35" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#1A5276" letter-spacing="1">أم</text></svg>`;
+  const win = window.open('', '_blank');
+  if(!win){ alert('من فضلك اسمح بالنوافذ المنبثقة (Pop-ups) عشان تقدر تطبع أو تحفظ PDF'); return; }
+  win.document.write(`<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>${title}</title>
+  <style>${DOC_STYLE}</style></head><body>
+    ${buildDocInnerHtml(title, bodyHtml, logoSvg)}
+    <script>window.onload=function(){setTimeout(function(){window.print();},250);};<\/script>
+  </body></html>`);
+  win.document.close();
+}
+
+// يحوّل محتوى المستند لصورة JPEG عالية الجودة عن طريق رسمه في SVG foreignObject ثم Canvas
+async function renderDocToJpeg(title, bodyHtml){
+  const logoSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 70 70"><defs><linearGradient id="pg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#FFD700"/><stop offset="100%" style="stop-color:#F39C12"/></linearGradient></defs><circle cx="35" cy="35" r="35" fill="url(#pg2)"/><text x="35" y="46" text-anchor="middle" font-family="Georgia,serif" font-size="24" font-weight="bold" fill="#1A5276" letter-spacing="1">أم</text></svg>`;
+  const holder=document.createElement('div');
+  holder.style.cssText=`position:fixed;left:-9999px;top:0;z-index:-1;width:${A4_WIDTH_PX}px;`;
+  holder.innerHTML=`<style>${DOC_STYLE}</style><div class="doc-wrap" id="_pdfDocRoot">${buildDocInnerHtml(title, bodyHtml, logoSvg)}</div>`;
+  document.body.appendChild(holder);
+  await new Promise(r=>setTimeout(r,60));
+  const rootEl=holder.querySelector('#_pdfDocRoot');
+  const w=rootEl.offsetWidth||A4_WIDTH_PX;
+  const contentH=rootEl.offsetHeight||400;
+  const h=Math.max(contentH, A4_HEIGHT_PX);
+  const serializer=new XMLSerializer();
+  const styleStr=serializer.serializeToString(holder.querySelector('style'));
+  const rootStr=serializer.serializeToString(rootEl);
+  document.body.removeChild(holder);
+
+  const svgStr=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${contentH}"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml">${styleStr}${rootStr}</div></foreignObject></svg>`;
+  const svgDataUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgStr);
+
+  const img=new Image();
+  const loaded=new Promise((resolve,reject)=>{ img.onload=()=>resolve(); img.onerror=()=>reject(new Error('تعذر تجهيز صورة المستند')); });
+  img.src=svgDataUrl;
+  await loaded;
+
+  const scale=2;
+  const canvas=document.createElement('canvas');
+  canvas.width=w*scale; canvas.height=h*scale;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.drawImage(img,0,0,w*scale,contentH*scale);
+
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',0.92));
+  return {blob, cssWidth:w, cssHeight:h, pxWidth:canvas.width, pxHeight:canvas.height};
+}
+
+// بناء ملف PDF يدويًا (بدون أي مكتبة) بتضمين صورة المستند كصفحة واحدة
+function buildPdfFromJpeg(jpegBytes, pxWidth, pxHeight, ptWidth, ptHeight){
+  const encoder=new TextEncoder();
+  const parts=[]; let offset=0; const offsets=[];
+  function push(chunk){
+    const bytes=(typeof chunk==='string')?encoder.encode(chunk):chunk;
+    parts.push(bytes); offset+=bytes.length;
+  }
+  push('%PDF-1.4\n');
+  offsets[1]=offset; push(`1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n`);
+  offsets[2]=offset; push(`2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n`);
+  offsets[3]=offset; push(`3 0 obj\n<< /Type /Page /Parent 2 0 R /Resources << /XObject << /Im0 4 0 R >> /ProcSet [/PDF /ImageC] >> /MediaBox [0 0 ${ptWidth.toFixed(2)} ${ptHeight.toFixed(2)}] /Contents 5 0 R >>\nendobj\n`);
+  offsets[4]=offset; push(`4 0 obj\n<< /Type /XObject /Subtype /Image /Width ${pxWidth} /Height ${pxHeight} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpegBytes.length} >>\nstream\n`);
+  push(jpegBytes);
+  push(`\nendstream\nendobj\n`);
+  const contentStr=`q ${ptWidth.toFixed(2)} 0 0 ${ptHeight.toFixed(2)} 0 0 cm /Im0 Do Q`;
+  offsets[5]=offset; push(`5 0 obj\n<< /Length ${contentStr.length} >>\nstream\n${contentStr}\nendstream\nendobj\n`);
+  const xrefStart=offset;
+  push(`xref\n0 6\n0000000000 65535 f \n`);
+  for(let i=1;i<=5;i++){ push(String(offsets[i]).padStart(10,'0')+' 00000 n \n'); }
+  push(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xrefStart}\n%%EOF`);
+  const total=parts.reduce((s,p)=>s+p.length,0);
+  const out=new Uint8Array(total);
+  let pos=0; for(const p of parts){ out.set(p,pos); pos+=p.length; }
+  return new Blob([out],{type:'application/pdf'});
+}
+
+async function generateDocumentPdfBlob(title, bodyHtml){
+  const {blob, cssWidth, cssHeight, pxWidth, pxHeight}=await renderDocToJpeg(title, bodyHtml);
+  const jpegBytes=new Uint8Array(await blob.arrayBuffer());
+  const ptWidth=cssWidth*0.75, ptHeight=cssHeight*0.75;
+  const pdfBlob=buildPdfFromJpeg(jpegBytes, pxWidth, pxHeight, ptWidth, ptHeight);
+  return {pdfBlob, jpegBlob:blob};
+}
+
+// نافذة معاينة المستند قبل الإرسال — بترجع Promise تتحل لما المستخدم يقفل النافذة (سواء بعت أو رجع)
+function showPdfPreviewModal(jpegBlob, onConfirm, onPrint){
+  return new Promise((resolve)=>{
+    const url=URL.createObjectURL(jpegBlob);
+    const modal=document.createElement('div');
+    modal.id='pdfPreviewModal';
+    modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:16px;';
+    modal.innerHTML=`
+      <div style="background:#fff;border-radius:14px;max-width:420px;width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.3)">
+        <div style="padding:12px 16px;border-bottom:1px solid #D5D8DC;font-weight:bold;color:#1A5276;text-align:center">👁️ معاينة قبل الإرسال</div>
+        <div style="overflow:auto;flex:1;background:#F2F3F4;padding:10px;display:flex;justify-content:center">
+          <img src="${url}" style="width:100%;max-width:380px;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.15)">
+        </div>
+        <div style="display:flex;gap:8px;padding:12px 16px;border-top:1px solid #D5D8DC">
+          <button id="pdfPreviewBack" style="flex:1;background:#EAECEE;color:#333;border:none;border-radius:8px;padding:12px 6px;font-size:13px;cursor:pointer">→ رجوع</button>
+          ${onPrint?`<button id="pdfPreviewPrint" style="flex:1;background:#D6EAF8;color:#1A5276;border:none;border-radius:8px;padding:12px 6px;font-size:13px;font-weight:bold;cursor:pointer">🖨️ طباعة</button>`:''}
+          <button id="pdfPreviewSend" style="flex:1;background:#1A5276;color:#fff;border:none;border-radius:8px;padding:12px 6px;font-size:13px;font-weight:bold;cursor:pointer">📤 إرسال</button>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    function cleanup(){ URL.revokeObjectURL(url); modal.remove(); }
+    modal.querySelector('#pdfPreviewBack').onclick=()=>{ cleanup(); resolve(false); };
+    if(onPrint){
+      modal.querySelector('#pdfPreviewPrint').onclick=()=>{ try{ onPrint(); }catch(err){ console.error(err); } };
+    }
+    modal.querySelector('#pdfPreviewSend').onclick=async ()=>{
+      const btn=modal.querySelector('#pdfPreviewSend');
+      btn.disabled=true; btn.innerHTML='⏳ جاري الإرسال...';
+      try{ await onConfirm(); }
+      catch(err){ if(!(err && err.name==='AbortError')) console.error(err); }
+      cleanup(); resolve(true);
+    };
+  });
+}
+
+// أسماء ملفات الـ PDF بحروف لاتينية آمنة عشان مايبانش رموز غريبة على أي جهاز
+const ARABIC_TO_LATIN_MAP={
+  'ا':'a','أ':'a','إ':'e','آ':'aa','ب':'b','ت':'t','ث':'th','ج':'g','ح':'h','خ':'kh',
+  'د':'d','ذ':'z','ر':'r','ز':'z','س':'s','ش':'sh','ص':'s','ض':'d','ط':'t','ظ':'z',
+  'ع':'a','غ':'gh','ف':'f','ق':'k','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'w',
+  'ي':'y','ى':'a','ة':'a','ء':'','ئ':'e','ؤ':'o','ٱ':'a',
+  '٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9'
+};
+function safeFileName(str){
+  if(!str) return 'file';
+  let out='';
+  for(const ch of String(str)){
+    if(ARABIC_TO_LATIN_MAP[ch]!==undefined) out+=ARABIC_TO_LATIN_MAP[ch];
+    else if(/[A-Za-z0-9._-]/.test(ch)) out+=ch;
+    else if(/\s/.test(ch)) out+=' ';
+  }
+  out=out.replace(/\s+/g,'-').replace(/-+/g,'-').replace(/^[-.]+|[-.]+$/g,'');
+  return out||'file';
+}
+
+async function sendDocument(title, bodyHtml, filename){
+  const safeFilename=safeFileName(filename);
+  try{
+    const {pdfBlob, jpegBlob}=await generateDocumentPdfBlob(title, bodyHtml);
+    await showPdfPreviewModal(jpegBlob, async ()=>{
+      const file=new File([pdfBlob], safeFilename, {type:'application/pdf'});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], title});
+        return;
+      }
+      const url=URL.createObjectURL(pdfBlob);
+      const a=document.createElement('a');
+      a.href=url; a.download=safeFilename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url),5000);
+    }, ()=>printDocument(title, bodyHtml));
+  }catch(err){
+    if(err && err.name==='AbortError') return;
+    console.error(err);
+    printDocument(title, bodyHtml);
+  }
+}
+
+// ===== الرئيسية =====
+function goToStockWithMovForm(type){
+  stockSubTab='overview'; showMovForm=true; currentMovType=type; movPartyMode='text'; editProductId=null; showProductForm=false;
+  switchTab('stock');
+}
+function goToStockWithProductForm(){
+  stockSubTab='overview'; showProductForm=true; showMovForm=false; editProductId=null;
+  switchTab('stock');
+}
+function goToStockMovements(){
+  stockSubTab='movements';
+  switchTab('stock');
+}
+
+function renderHome(){
+  const wh=currentWarehouse();
+  const products=wh?wh.products:[];
+  const movements=wh?wh.movements:[];
+  const lowStock=products.filter(p=>stockQty(p.id)<10);
+  const todayStr=today();
+  const todayMovs=movements.filter(m=>m.date===todayStr);
+  const todayIn=todayMovs.filter(m=>m.type==='in').reduce((s,m)=>s+m.qty,0);
+  const todayOut=todayMovs.filter(m=>m.type==='out').reduce((s,m)=>s+m.qty,0);
+  const recentMovs=[...movements].sort((a,b)=>((b.date||'')+(b.createdAt||'')).localeCompare((a.date||'')+(a.createdAt||''))).slice(0,8);
+  const recentRows=recentMovs.map(m=>{
+    const p=products.find(p=>p.id===m.productId);
+    return `<div class="list-item">
+      <div class="list-item-head">
+        <div style="flex:1">
+          <div class="list-item-name">${p?p.name:'—'}</div>
+          <div class="list-item-sub">${m.date}${m.permitNo?' — إذن #'+m.permitNo:''}</div>
+          <div class="list-item-sub">${m.type==='in'?'من: ':'إلى: '}${partyDisplay(m.party)}</div>
+        </div>
+        <div class="list-item-bal">
+          <div class="list-item-bal-num" style="color:${m.type==='in'?'#1E8449':'#C0392B'}">${m.type==='in'?'↓':'↑'} ${m.qty}</div>
+          <div class="list-item-bal-lbl">${p?p.unit:''}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('tab-home').innerHTML=`
+    <div class="summary">
+      <div class="sum-card blue"><div class="sum-num">${products.length}</div><div class="sum-lbl">إجمالي الأصناف</div></div>
+      <div class="sum-card ${lowStock.length>0?'orange':'green'}"><div class="sum-num">${lowStock.length}</div><div class="sum-lbl">أصناف قاربت على النفاد</div></div>
+      <div class="sum-card green"><div class="sum-num">${todayIn}</div><div class="sum-lbl">وارد النهاردة</div></div>
+      <div class="sum-card red"><div class="sum-num">${todayOut}</div><div class="sum-lbl">صادر النهاردة</div></div>
+    </div>
+    <div class="btn-row" style="margin-bottom:14px">
+      <button class="btn green" onclick="goToStockWithMovForm('in')">+ وارد</button>
+      <button class="btn red" onclick="goToStockWithMovForm('out')">+ صادر</button>
+      <button class="btn blue" onclick="goToStockWithProductForm()">+ منتج جديد</button>
+      ${products.length>0?`<button class="btn purple" onclick="this.disabled=true;const t=this.innerHTML;this.innerHTML='⏳';printStockSummaryPdf().finally(()=>{this.disabled=false;this.innerHTML=t;})">📤 جرد المخزن PDF</button>`:''}
+    </div>
+    ${lowStock.length>0?`
+    <div class="card">
+      <div class="card-head orange">⚠️ أصناف قاربت على النفاد</div>
+      <div class="card-body" style="padding:8px 14px">
+        ${lowStock.map(p=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F2F3F4;font-size:13px">
+          <span>${p.name}</span><span style="font-weight:bold;color:#C0392B">${stockQty(p.id)} ${p.unit}</span>
+        </div>`).join('')}
+      </div>
+    </div>`:''}
+    <div class="card">
+      <div class="card-head">📋 آخر الحركات
+        ${movements.length>0?`<button class="btn-sm blue" onclick="goToStockMovements()">عرض الكل</button>`:''}
+      </div>
+      <div class="card-body" style="padding:10px">
+        ${recentMovs.length===0?'<div class="empty">لا توجد حركات مسجّلة بعد</div>':recentRows}
+      </div>
+    </div>`;
+}
+
+// ===== المخزن =====
+let stockSubTab='overview';
+let stockDetailId=null;
+let showProductForm=false;
+let editProductId=null;
+let showMovForm=false;
+let stockListSearch='';
+let currentMovType='in';
+let movPartyMode='text';
+
+function renderStock(){
+  if(stockDetailId){renderStockDetail();return;}
+  document.getElementById('tab-stock').innerHTML=`
+    <div class="sub-tabs">
+      <button class="btn ${stockSubTab==='overview'?'blue':'btn-outline'}" onclick="stockSubTab='overview';renderStock()">📦 المنتجات</button>
+      <button class="${stockSubTab==='movements'?'btn blue':'btn-outline'}" onclick="stockSubTab='movements';renderStock()">🔄 الحركات</button>
+    </div>
+    <div id="stock-content"></div>`;
+  if(stockSubTab==='overview')renderStockOverview();
+  else renderStockMovements();
+}
+
+async function printStockSummaryPdf(){
+  const wh=currentWarehouse();
+  const rows=wh.products.map(p=>{
+    const qty=stockQty(p.id);
+    const batches=stockBatches(p.id);
+    const batchTxt=batches.length>0?batches.map(([exp,q])=>`${exp}: ${q}`).join(' | '):'—';
+    return `<tr>
+      <td>${p.name}</td>
+      <td>${p.unit}</td>
+      <td style="font-weight:bold;color:${qty<10?'#C0392B':'#1E8449'}">${qty}</td>
+      <td style="font-size:11px">${batchTxt}</td>
+    </tr>`;
+  }).join('');
+  const totalItems=wh.products.length;
+  const lowCount=wh.products.filter(p=>stockQty(p.id)<10).length;
+  const body=`
+    <div class="doc-info">
+      <div><strong>المخزن:</strong> ${wh.name}</div>
+      <div><strong>تاريخ الجرد:</strong> ${today()}</div>
+      <div><strong>عدد الأصناف:</strong> ${totalItems}</div>
+    </div>
+    <div class="doc-summary">
+      <div class="doc-sum-box"><div class="n">${totalItems}</div><div class="l">إجمالي الأصناف</div></div>
+      <div class="doc-sum-box"><div class="n">${lowCount}</div><div class="l">أصناف قاربت على النفاد</div></div>
+    </div>
+    ${wh.products.length===0?'<div style="text-align:center;color:#717D7E;padding:20px 0">لا توجد أصناف</div>':`<table><thead><tr><th>الصنف</th><th>الوحدة</th><th>الرصيد الحالي</th><th>الدفعات (الصلاحية: الكمية)</th></tr></thead><tbody>${rows}</tbody></table>`}`;
+  await sendDocument('جرد المخزن — '+wh.name, body, `جرد-المخزن-${safeFileName(wh.name)}-${today()}.pdf`);
+}
+
+function renderStockOverview(){
+  const wh=currentWarehouse();
+  const productOptsArr=wh.products.map(p=>({id:p.id,label:p.name,sub:`الرصيد: ${stockQty(p.id)} ${p.unit}`}));
+  const otherWarehouses=warehouses.filter(w=>w.id!==currentWarehouseId).map(w=>({id:w.id,label:w.name}));
+  const filteredStock=wh.products.filter(p=>p.name.includes(stockListSearch));
+  let items=filteredStock.map(p=>{
+    const qty=stockQty(p.id);
+    const qtyColor=qty<10?'#C0392B':'#1E8449';
+    const batches=stockBatches(p.id);
+    const batchHtml=batches.length>0
+      ?batches.map(([exp,q])=>`<span style="background:#EBF5FB;border:1px solid #AED6F1;border-radius:4px;padding:2px 6px;font-size:10px;color:#1A5276;margin-left:4px">📅 ${exp}: <b>${q}</b></span>`).join('')
+      :'';
+    return `<div class="list-item">
+      <div class="list-item-head">
+        <div style="flex:1">
+          <div class="list-item-name">${p.name}</div>
+          <div class="list-item-sub">وحدة: ${p.unit}${p.manufacturer?' — '+p.manufacturer:''}</div>
+          ${batchHtml?`<div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:3px">${batchHtml}</div>`:''}
+        </div>
+        <div class="list-item-bal"><div class="list-item-bal-num" style="color:${qtyColor};font-size:20px">${qty}</div><div class="list-item-bal-lbl">${p.unit}</div></div>
+      </div>
+      <div class="list-item-actions">
+        <button class="btn-sm blue" onclick="stockDetailId='${p.id}';renderStock()">📋 الحركات</button>
+        <button class="btn-sm orange" onclick="editProduct('${p.id}')">✏️ تعديل</button>
+        <button class="btn-sm red" onclick="deleteProduct('${p.id}')">🗑 حذف</button>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('stock-content').innerHTML=`
+    <div class="search-row" style="align-items:center">
+      <input type="text" id="stock_search_input" style="flex:1;border:1px solid #D5D8DC;border-radius:6px;padding:8px 10px;" placeholder="🔍 بحث عن صنف..." value="${stockListSearch}" oninput="searchInputHandler(this,v=>stockListSearch=v,renderStock)">
+      ${wh.products.length>0?`<button class="btn-sm purple" onclick="this.disabled=true;const t=this.innerHTML;this.innerHTML='⏳';printStockSummaryPdf().finally(()=>{this.disabled=false;this.innerHTML=t;})">📤 جرد المخزن PDF</button>`:''}
+    </div>
+    ${showProductForm?(()=>{
+      const editingP=editProductId?wh.products.find(p=>p.id===editProductId):null;
+      return `
+    <div class="card">
+      <div class="card-head ${editingP?'orange':'green'}">${editingP?'✏️ تعديل بيانات المنتج':'إضافة منتج جديد'}</div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group" style="flex:2"><div class="lbl">اسم المنتج *</div><input type="text" id="p_name" placeholder="اسم الدواء / المنتج" value="${editingP?editingP.name:''}"></div>
+          <div class="form-group"><div class="lbl">الوحدة / الوزن</div>
+            <input type="text" id="p_unit" placeholder="مثال: 100 مل، كجم، لتر..." value="${editingP?(editingP.unit||''):''}">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><div class="lbl">الشركة المصنعة — اختياري</div><input type="text" id="p_manufacturer" placeholder="اسم الشركة المصنعة" value="${editingP?(editingP.manufacturer||''):''}"></div>
+          <div class="form-group"><div class="lbl">المادة الفعالة — اختياري</div><input type="text" id="p_active" placeholder="المادة الفعالة" value="${editingP?(editingP.activeIngredient||''):''}"></div>
+        </div>
+        ${editingP?'':`
+        <div class="form-row">
+          <div class="form-group"><div class="lbl">رصيد أول (كمية) — اختياري</div><input type="number" id="p_opening_qty" min="0" placeholder="0"></div>
+          <div class="form-group"><div class="lbl">تاريخ الرصيد الأول</div><input type="date" id="p_opening_date" value="${today()}"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><div class="lbl">📅 تاريخ صلاحية الرصيد الأول</div><input type="month" id="p_opening_expiry" placeholder="اختر تاريخ الصلاحية"></div>
+        </div>`}
+        ${editingP?'<div style="font-size:11px;color:#717D7E;margin-bottom:6px">💡 لتغيير الكمية استخدم "حركة مخزن" — الكمية مش بتتعدل من هنا</div>':''}
+        <div class="btn-row">
+          <button class="btn ${editingP?'orange':'green'}" onclick="saveProduct()">${editingP?'✓ حفظ التعديل':'+ إضافة'}</button>
+          <button class="btn-outline" onclick="editProductId=null;showProductForm=false;renderStock()">إلغاء</button>
+        </div>
+      </div>
+    </div>`;
+    })():''}
+    ${showMovForm?`
+    <div class="card">
+      <div class="card-head">تسجيل حركة مخزن</div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group"><div class="lbl">النوع</div>
+            <div style="display:flex;gap:6px">
+              <button class="btn ${currentMovType==='in'?'green':'btn-outline'}" onclick="currentMovType='in';renderStock()">وارد ↓</button>
+              <button class="${currentMovType==='out'?'btn red':'btn-outline'}" onclick="currentMovType='out';renderStock()">صادر ↑</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><div class="lbl">المنتج *</div>${searchableSelectHtml('mov_product', productOptsArr, '🔍 دور على الصنف...', '')}</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><div class="lbl">الكمية *</div><input type="number" id="mov_qty" min="1" placeholder="0"></div>
+          <div class="form-group"><div class="lbl">التاريخ</div><input type="date" id="mov_date" value="${today()}"></div>
+        </div>
+        ${currentMovType==='in'?`<div class="form-row">
+          <div class="form-group"><div class="lbl">📅 تاريخ الصلاحية</div><input type="month" id="mov_expiry" placeholder="اختر تاريخ الصلاحية"></div>
+        </div>`:''}
+        <div class="form-row">
+          <div class="form-group">
+            <div class="lbl">${currentMovType==='in'?'الوارد جاي منين؟ — اختياري':'الصادر رايح لمين؟ — اختياري'}</div>
+            <div style="display:flex;gap:6px;margin-bottom:6px">
+              <button class="${movPartyMode==='text'?'btn blue':'btn-outline'}" onclick="movPartyMode='text';renderStock()">✍️ اسم / جهة</button>
+              ${otherWarehouses.length>0?`<button class="${movPartyMode==='warehouse'?'btn blue':'btn-outline'}" onclick="movPartyMode='warehouse';renderStock()">📦 مخزن تاني</button>`:''}
+            </div>
+            ${movPartyMode==='warehouse'&&otherWarehouses.length>0
+              ?searchableSelectHtml('mov_party_wh', otherWarehouses, '🔍 اختر المخزن...', '')
+              :`<input type="text" id="mov_party_text" placeholder="${currentMovType==='in'?'اسم المورد أو الجهة':'اسم العميل أو الجهة'}">`}
+            ${movPartyMode==='warehouse'&&otherWarehouses.length>0?`<div style="font-size:11px;color:#717D7E;margin-top:4px">💡 لو اخترت مخزن، هيتسجل تلقائي حركة ${currentMovType==='in'?'"صادر"':'"وارد"'} مقابلة في المخزن ده (نقل حقيقي مربوط بين المخزنين)</div>`:''}
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><div class="lbl">رقم الإذن — اختياري</div><input type="text" id="mov_permit" placeholder="رقم إذن الصرف/الاستلام"></div>
+          <div class="form-group"><div class="lbl">ملاحظة</div><input type="text" id="mov_note" placeholder="ملاحظة اختيارية"></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn ${currentMovType==='in'?'green':'red'}" onclick="saveMovement()">✓ تسجيل</button>
+          <button class="btn-outline" onclick="showMovForm=false;renderStock()">إلغاء</button>
+        </div>
+      </div>
+    </div>`:''}
+    <div class="btn-row" style="margin-bottom:10px">
+      ${!showProductForm?`<button class="btn blue" onclick="editProductId=null;showProductForm=true;renderStock()">+ منتج جديد</button>`:''}
+      ${!showMovForm?`<button class="btn green" onclick="showMovForm=true;movPartyMode='text';renderStock()">+ حركة مخزن</button>`:''}
+    </div>
+    ${filteredStock.length===0?`<div class="empty">${wh.products.length===0?'لا توجد منتجات. أضف منتجاتك أولاً.':'لا توجد نتائج بحث'}</div>`:items}`;
+}
+
+function editProduct(id){
+  editProductId=id;
+  showProductForm=true;
+  renderStock();
+}
+function saveProduct(){
+  const name=document.getElementById('p_name')?.value.trim();
+  const unit=document.getElementById('p_unit')?.value||'وحدة';
+  const manufacturer=document.getElementById('p_manufacturer')?.value.trim()||'';
+  const activeIngredient=document.getElementById('p_active')?.value.trim()||'';
+  if(!name){alert('أدخل اسم المنتج');return;}
+  const wh=currentWarehouse();
+  if(editProductId){
+    const p=wh.products.find(p=>p.id===editProductId);
+    if(!p){editProductId=null;showProductForm=false;renderStock();return;}
+    p.name=name; p.unit=unit;
+    if(manufacturer)p.manufacturer=manufacturer; else delete p.manufacturer;
+    if(activeIngredient)p.activeIngredient=activeIngredient; else delete p.activeIngredient;
+    save();
+    editProductId=null; showProductForm=false;
+    renderStock();
+    return;
+  }
+  const openingQty=Number(document.getElementById('p_opening_qty')?.value||0);
+  const openingDate=document.getElementById('p_opening_date')?.value||today();
+  const openingExpiry=document.getElementById('p_opening_expiry')?.value||'';
+  const newProduct={id:uid(),name,unit};
+  if(manufacturer)newProduct.manufacturer=manufacturer;
+  if(activeIngredient)newProduct.activeIngredient=activeIngredient;
+  wh.products.push(newProduct);
+  if(openingQty>0){
+    wh.movements.push({id:uid(),productId:newProduct.id,type:'in',qty:openingQty,date:openingDate,note:'رصيد افتتاحي',expiry:openingExpiry,party:null,permitNo:'',createdAt:new Date().toISOString()});
+  }
+  save();showProductForm=false;renderStock();
+}
+function deleteProduct(id){
+  if(!confirm('هتحذف المنتج ده وكل حركاته المسجّلة في المخزن ده؟'))return;
+  const wh=currentWarehouse();
+  wh.products=wh.products.filter(p=>p.id!==id);
+  wh.movements=wh.movements.filter(m=>m.productId!==id);
+  save();renderStock();
+}
+
+// بيتحقق من الكمية المتاحة لصنف معين في مخزن معين (مش بالضرورة المخزن الحالي) — بيتستخدم عشان نتأكد قبل عملية نقل بين مخزنين
+function saveMovement(){
+  const productId=document.getElementById('mov_product')?.value;
+  const qty=Number(document.getElementById('mov_qty')?.value||0);
+  const date=document.getElementById('mov_date')?.value||today();
+  const note=document.getElementById('mov_note')?.value||'';
+  const expiry=currentMovType==='in'?(document.getElementById('mov_expiry')?.value||''):'';
+  const permitNo=document.getElementById('mov_permit')?.value.trim()||'';
+  if(!productId||!qty){alert('اختر منتج وأدخل الكمية');return;}
+  const wh=currentWarehouse();
+  if(currentMovType==='out'&&stockQty(productId)<qty){alert('الكمية المتاحة '+stockQty(productId)+' فقط');return;}
+
+  let party=null;
+  if(movPartyMode==='warehouse'){
+    const whId=document.getElementById('mov_party_wh')?.value;
+    if(!whId){alert('اختر المخزن التاني');return;}
+    const destWh=warehouses.find(w=>w.id===whId);
+    if(!destWh){alert('تعذر إيجاد المخزن المحدد');return;}
+    // لو النوع "وارد" (يعني جاي من المخزن ده)، لازم نتأكد إن المخزن ده عنده كمية كافية من نفس الصنف قبل ما نأكد النقل
+    if(currentMovType==='in'){
+      const srcProduct=wh.products.find(p=>p.id===productId);
+      const destProduct=destWh.products.find(p=>p.name.trim()===srcProduct.name.trim());
+      const destQty=destProduct?stockQtyFor(destWh,destProduct.id):0;
+      if(!destProduct||destQty<qty){
+        alert('الكمية المتاحة من "'+srcProduct.name+'" في مخزن "'+destWh.name+'" مش كفاية (المتاح: '+destQty+')');
+        return;
+      }
+    }
+    party={mode:'warehouse',warehouseId:whId};
+  }else{
+    const txt=document.getElementById('mov_party_text')?.value.trim()||'';
+    if(txt) party={mode:'text',text:txt};
+  }
+
+  const mov={id:uid(),productId,type:currentMovType,qty,date,note,expiry,party,permitNo,createdAt:new Date().toISOString()};
+  wh.movements.push(mov);
+  if(party && party.mode==='warehouse') createLinkedTransfer(wh, mov);
+  save();showMovForm=false;movPartyMode='text';renderStock();
+}
+
+// بيسجل تلقائيًا الحركة المقابلة في المخزن التاني (نقل حقيقي ومربوط بين مخزنين) — بيدور على نفس الصنف بالاسم، ولو مش موجود بينشئه
+function createLinkedTransfer(sourceWh, mov){
+  const destWh=warehouses.find(w=>w.id===mov.party.warehouseId);
+  if(!destWh) return;
+  const srcProduct=sourceWh.products.find(p=>p.id===mov.productId);
+  if(!srcProduct) return;
+  let destProduct=destWh.products.find(p=>p.name.trim()===srcProduct.name.trim());
+  if(!destProduct){
+    destProduct={id:uid(),name:srcProduct.name,unit:srcProduct.unit};
+    if(srcProduct.manufacturer) destProduct.manufacturer=srcProduct.manufacturer;
+    if(srcProduct.activeIngredient) destProduct.activeIngredient=srcProduct.activeIngredient;
+    destWh.products.push(destProduct);
+  }
+  const linkedType = mov.type==='out' ? 'in' : 'out';
+  const linkedMov={
+    id:uid(), productId:destProduct.id, type:linkedType, qty:mov.qty, date:mov.date,
+    note: mov.type==='out' ? ('تحويل وارد من مخزن: '+sourceWh.name) : ('تحويل صادر إلى مخزن: '+sourceWh.name),
+    expiry: linkedType==='in' ? mov.expiry : '',
+    party:{mode:'warehouse',warehouseId:sourceWh.id},
+    permitNo: mov.permitNo,
+    linkedWarehouseId: sourceWh.id,
+    linkedMovementId: mov.id,
+    createdAt: new Date().toISOString()
+  };
+  destWh.movements.push(linkedMov);
+  mov.linkedWarehouseId=destWh.id;
+  mov.linkedMovementId=linkedMov.id;
+}
+
+// حذف حركة — لو كانت جزء من عملية نقل بين مخزنين، بيتم حذف الحركة المقابلة في المخزن التاني كمان (عشان الاتنين يفضلوا متطابقين)
+function deleteMovement(id){
+  const wh=currentWarehouse();
+  const mov=wh.movements.find(m=>m.id===id);
+  if(!mov) return;
+  if(mov.linkedMovementId && mov.linkedWarehouseId){
+    if(!confirm('الحركة دي جزء من عملية نقل بين مخزنين — حذفها هيحذف الحركة المقابلة في المخزن التاني كمان. متأكد؟')) return;
+    const destWh=warehouses.find(w=>w.id===mov.linkedWarehouseId);
+    if(destWh) destWh.movements=destWh.movements.filter(m=>m.id!==mov.linkedMovementId);
+  }else{
+    if(!confirm('هتحذف الحركة دي؟')) return;
+  }
+  wh.movements=wh.movements.filter(m=>m.id!==id);
+  save();
+  if(stockDetailId) renderStockDetail(); else renderStock();
+}
+
+function renderStockMovements(){
+  const wh=currentWarehouse();
+  const sorted=[...wh.movements].sort((a,b)=>((b.date||'')+(b.createdAt||'')).localeCompare((a.date||'')+(a.createdAt||'')));
+  const rows=sorted.map(m=>{
+    const p=wh.products.find(p=>p.id===m.productId);
+    return `<tr><td>${p?.name||'—'}</td><td>${m.date}</td>
+      <td><span class="badge ${m.type==='in'?'green':'red'}">${m.type==='in'?'وارد':'صادر'}</span></td>
+      <td style="font-weight:bold">${m.qty}</td>
+      <td>${m.expiry||'—'}</td>
+      <td style="font-size:12px">${partyDisplay(m.party)}</td>
+      <td>${m.permitNo||'—'}</td>
+      <td>${m.note||'—'}</td>
+      <td><button class="btn-sm red" onclick="deleteMovement('${m.id}')">🗑</button></td></tr>`;
+  }).join('');
+  document.getElementById('stock-content').innerHTML=`
+    <div style="display:flex;justify-content:flex-end;margin-bottom:10px">
+      <button class="btn green" onclick="stockSubTab='overview';showMovForm=true;movPartyMode='text';renderStock()">+ حركة جديدة</button>
+    </div>
+    ${sorted.length===0?'<div class="empty">لا توجد حركات</div>':`<div class="card tbl-wrap"><table><thead><tr><th>المنتج</th><th>التاريخ</th><th>النوع</th><th>الكمية</th><th>الصلاحية</th><th>الجهة</th><th>رقم الإذن</th><th>ملاحظة</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`}`;
+}
+
+function renderStockDetail(){
+  const wh=currentWarehouse();
+  const p=wh.products.find(p=>p.id===stockDetailId);
+  if(!p){stockDetailId=null;renderStock();return;}
+  const moves=wh.movements.filter(m=>m.productId===stockDetailId).sort((a,b)=>((b.date||'')+(b.createdAt||'')).localeCompare((a.date||'')+(a.createdAt||'')));
+  const totalIn=moves.filter(m=>m.type==='in').reduce((s,m)=>s+m.qty,0);
+  const totalOut=moves.filter(m=>m.type==='out').reduce((s,m)=>s+m.qty,0);
+  const rows=moves.map(m=>`<tr>
+    <td>${m.date}</td>
+    <td><span class="badge ${m.type==='in'?'green':'red'}">${m.type==='in'?'وارد ↓':'صادر ↑'}</span></td>
+    <td style="font-weight:bold">${m.qty}</td>
+    <td style="font-size:12px">${partyDisplay(m.party)}</td>
+    <td>${m.permitNo||'—'}</td>
+    <td>${m.note||'—'}</td>
+    <td><button class="btn-sm red" onclick="deleteMovement('${m.id}')">🗑</button></td>
+  </tr>`).join('');
+  document.getElementById('tab-stock').innerHTML=`
+    <div class="back-row">
+      <button class="btn gray" onclick="stockDetailId=null;renderStock()">← رجوع</button>
+      <div class="page-title">حركة مخزن: ${p.name}</div>
+    </div>
+    <div class="summary">
+      <div class="sum-card blue"><div class="sum-num">${stockQty(p.id)}</div><div class="sum-lbl">الرصيد الحالي (${p.unit})</div></div>
+      <div class="sum-card green"><div class="sum-num">${totalIn}</div><div class="sum-lbl">إجمالي الوارد</div></div>
+      <div class="sum-card red"><div class="sum-num">${totalOut}</div><div class="sum-lbl">إجمالي الصادر</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head">📋 سجل الحركات</div>
+      ${moves.length===0?'<div class="empty">لا توجد حركات</div>':`<div class="tbl-wrap"><table><thead><tr><th>التاريخ</th><th>النوع</th><th>الكمية</th><th>الجهة</th><th>رقم الإذن</th><th>ملاحظة</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`}
+    </div>`;
+}
+
+// ===== BACKUP =====
+function exportData(){
+  document.getElementById('exportModal').style.display='flex';
+}
+function buildExportBlob(){
+  const data={warehouses, currentWarehouseId, companyProfile, appEdition:'ameen-almakhzan', exportDate:new Date().toISOString()};
+  return new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+}
+function markExported(){
+  DB.set('am_lastExport', new Date().toISOString());
+  hideExportReminder();
+}
+function doExportDevice(){
+  const blob=buildExportBlob();
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='نسخة_احتياطية'+backupFileLabel()+'_'+today()+'.json';a.click();
+  URL.revokeObjectURL(url);
+  markExported();
+  document.getElementById('exportModal').style.display='none';
+}
+async function doExportShare(){
+  const blob=buildExportBlob();
+  const fileName='نسخة_احتياطية'+backupFileLabel()+'_'+today()+'.json';
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=fileName;a.click();
+  URL.revokeObjectURL(url);
+  markExported();
+  document.getElementById('exportModal').style.display='none';
+  await new Promise(r=>setTimeout(r,800));
+  const file=new File([blob],fileName,{type:'application/json'});
+  if(navigator.share){
+    try{
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file],title:'نسخة احتياطية',text:'نسخة احتياطية من أمين المخزن'});
+      }else{
+        await navigator.share({title:'نسخة احتياطية - '+fileName,text:'تم حفظ الملف على جهازك، ارفعه على جوجل درايف أو جيميل من مدير الملفات.'});
+      }
+    }catch(e){}
+  }else{
+    setTimeout(()=>alert('✅ تم حفظ الملف على جهازك.\nافتح تطبيق جوجل درايف أو جيميل وارفع الملف من مجلد التنزيلات (Downloads).'),300);
+  }
+}
+function hideExportReminder(){
+  const el=document.getElementById('exportReminder');
+  if(el) el.style.display='none';
+}
+// نسخة احتياطية تلقائية فعلية: بتنزل ملف الباك أب لوحدها في مجلد التنزيلات كل كام يوم من غير ما ينتظر المستخدم يدوس زرار
+function checkAutoBackup(){
+  const hasData = warehouses.some(w=>w.products.length>0 || w.movements.length>0);
+  if(!hasData) return;
+  const last = DB.get('am_lastAutoExport');
+  const daysSince = last ? (Date.now()-new Date(last).getTime())/(1000*60*60*24) : Infinity;
+  if(daysSince < 3) return;
+  try{
+    const blob = buildExportBlob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'نسخة_احتياطية_تلقائية'+backupFileLabel()+'_'+today()+'.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 3000);
+    const now = new Date().toISOString();
+    DB.set('am_lastAutoExport', now);
+    DB.set('am_lastExport', now);
+    hideExportReminder();
+  }catch(e){
+    console.error('فشل الباك أب التلقائي', e);
+  }
+}
+
+function checkExportReminder(){
+  const last=DB.get('am_lastExport');
+  const banner=document.getElementById('exportReminder');
+  if(!banner)return;
+  if(!last){
+    banner.style.display='flex';
+    banner.querySelector('.reminder-text').textContent='⚠️ متعملتش نسخة احتياطية لسه — يفضل تصدّر بياناتك بانتظام.';
+    return;
+  }
+  const daysSince=(Date.now()-new Date(last).getTime())/(1000*60*60*24);
+  if(daysSince>=7){
+    banner.style.display='flex';
+    banner.querySelector('.reminder-text').textContent=`⚠️ آخر تصدير كان من ${Math.floor(daysSince)} يوم — يفضل تعمل نسخة احتياطية جديدة.`;
+  }else{
+    banner.style.display='none';
+  }
+}
+function importData(){
+  const input=document.createElement('input');
+  input.type='file';input.accept='.json';
+  input.onchange=(e)=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=(ev)=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(!Array.isArray(data.warehouses) || data.warehouses.length===0){alert('الملف مش صح أو مفيهوش بيانات مخازن!');return;}
+        if(!confirm('هيتم استبدال كل البيانات الحالية بالنسخة دي. متأكد؟'))return;
+        warehouses=data.warehouses.map(w=>({
+          id:w.id||uid(),
+          name:w.name||'مخزن',
+          products:Array.isArray(w.products)?w.products:[],
+          movements:Array.isArray(w.movements)?w.movements:[]
+        }));
+        currentWarehouseId = data.currentWarehouseId && warehouses.some(w=>w.id===data.currentWarehouseId) ? data.currentWarehouseId : warehouses[0].id;
+        if(data.companyProfile && typeof data.companyProfile==='object'){companyProfile=data.companyProfile;}
+        save();
+        alert('✅ تم استيراد البيانات بنجاح!');
+        renderCompanyBar(); renderWarehouseBar(); renderTabsBar(); render();
+      }catch(err){alert('حصل خطأ في قراءة الملف!');}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ===== نظام التفعيل (تجربة 7 أيام / تفعيل دائم / أسبوع إضافي) =====
+// ملحوظة: المعادلات هنا مختلفة تمامًا عن باقي تطبيقات علي (مدير المندوب / التوزيع) — أكواد تفعيل مستقلة بالكامل لمنتج "أمين المخزن"
+function initActivation(){
+  let dCode = DB.get('am_dc');
+  if(!dCode){
+    dCode = Math.floor(1000 + Math.random() * 9000);
+    DB.set('am_dc', dCode);
+  }
+
+  const activated = DB.get('am_ak');
+  if(activated && _vk(dCode, activated)){
+    render();
+    return;
+  }
+
+  const trialStart = DB.get('am_ts');
+  const trialActivated = DB.get('am_ta');
+  if(trialStart && trialActivated && _vt(dCode, trialActivated)){
+    const daysPassed = (Date.now() - trialStart) / (1000*60*60*24);
+    if(daysPassed < 7){
+      render();
+      _showTrialBanner(7 - Math.floor(daysPassed));
+      return;
+    }
+    _showLockScreen(dCode, true);
+    return;
+  }
+
+  _showLockScreen(dCode, false);
+}
+
+function _showTrialBanner(daysLeft){
+  if(document.getElementById('trialBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'trialBanner';
+  banner.style.cssText = 'background:#F39C12;color:#fff;text-align:center;padding:6px;font-size:12px;font-weight:bold;position:relative;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;';
+  banner.innerHTML = `<span>⏳ النسخة التجريبية — باقي <strong>${daysLeft}</strong> ${daysLeft===1?'يوم':'أيام'}</span>
+    <button onclick="_openActivationFromTrial()" style="background:#fff;color:#F39C12;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:bold;cursor:pointer">🔓 فعّل دلوقتي</button>`;
+  const header = document.querySelector('.header');
+  if(header) header.insertAdjacentElement('afterend', banner);
+}
+
+function _openActivationFromTrial(){
+  const dCode = DB.get('am_dc');
+  _showLockScreen(dCode, false, true);
+}
+
+function _closeLockScreenFromTrial(){
+  const ls=document.getElementById('lockScreen');
+  if(ls) ls.remove();
+  const header = document.querySelector('.header');
+  const tabs = document.querySelector('.tabs');
+  const body = document.querySelector('.body');
+  const wm = document.querySelector('.watermark');
+  if(header) header.style.display='';
+  if(tabs) tabs.style.display='';
+  if(body) body.style.display='';
+  if(wm) wm.style.display='';
+  const tb=document.getElementById('trialBanner');
+  if(tb) tb.style.display='';
+}
+
+function _showLockScreen(dCode, trialExpired, fromTrial){
+  const header = document.querySelector('.header');
+  const tabs = document.querySelector('.tabs');
+  const body = document.querySelector('.body');
+  const wm = document.querySelector('.watermark');
+  if(header) header.style.display='none';
+  if(tabs) tabs.style.display='none';
+  if(body) body.style.display='none';
+  if(wm) wm.style.display='none';
+  const trialBanner = document.getElementById('trialBanner');
+  if(trialBanner) trialBanner.style.display='none';
+
+  const extensionUsed = !!DB.get('am_te');
+  const expiredMsg = trialExpired
+    ? `<div style="background:rgba(231,76,60,.3);border-radius:8px;padding:10px;margin-bottom:20px;font-size:13px;">⏰ انتهت فترة التجربة المجانية (7 أيام)<br>${extensionUsed?'للاستمرار فعّل النسخة الكاملة':'تقدر تاخد أسبوع إضافي أو تفعّل النسخة الكاملة'}</div>`
+    : `<div style="font-size:13px;opacity:.85;margin-bottom:20px;">للتجربة المجانية 7 أيام أو التفعيل الدائم<br>تواصل مع المبرمج على واتساب</div>`;
+
+  const lockScreen = document.createElement('div');
+  lockScreen.id = 'lockScreen';
+  lockScreen.style.cssText = `
+    position:fixed;top:0;left:0;right:0;bottom:0;
+    background:linear-gradient(135deg,#1A5276,#1E8449);
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:center;z-index:99999;padding:30px;
+    font-family:'Segoe UI',Tahoma,Arial,sans-serif;color:#fff;text-align:center;
+    -webkit-overflow-scrolling:touch;overflow-y:auto;
+  `;
+  lockScreen.innerHTML = `
+    ${fromTrial?`<button onclick="_closeLockScreenFromTrial()" style="position:absolute;top:14px;left:14px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:6px;padding:6px 12px;font-size:12px;cursor:pointer">✕ رجوع</button>`:''}
+    <div style="font-size:50px;margin-bottom:16px;">${trialExpired?'⏰':'🔒'}</div>
+    <div style="font-size:20px;font-weight:bold;margin-bottom:8px;">أمين المخزن</div>
+    ${expiredMsg}
+    <div style="background:rgba(255,255,255,.15);border-radius:12px;padding:20px 24px;margin-bottom:24px;width:100%;max-width:320px;">
+      <div style="font-size:13px;opacity:.9;margin-bottom:10px;">أرسل كود الجهاز ده للمبرمج على واتساب:</div>
+      <div style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#FFD700;">${dCode}</div>
+      <div style="font-size:11px;opacity:.7;margin-top:6px;">كود الجهاز</div>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;width:100%;max-width:320px;">
+      <input id="serialInput" type="number" placeholder="أدخل الكود هنا" style="
+        flex:1;padding:12px;border-radius:8px;border:2px solid rgba(255,255,255,.4);
+        background:rgba(255,255,255,.1);color:#fff;font-size:16px;text-align:center;
+        outline:none;direction:ltr;-webkit-appearance:none;
+      ">
+    </div>
+    ${!trialExpired && !fromTrial?`
+    <button onclick="_activateTrial(${dCode})" style="
+      background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.6);border-radius:8px;
+      padding:12px 40px;font-size:14px;font-weight:bold;cursor:pointer;
+      width:100%;max-width:320px;margin-bottom:8px;-webkit-appearance:none;
+    ">🎁 تفعيل النسخة التجريبية (7 أيام)</button>`:''}
+    ${trialExpired && !extensionUsed?`
+    <button onclick="_activateExtension(${dCode})" style="
+      background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.6);border-radius:8px;
+      padding:12px 40px;font-size:14px;font-weight:bold;cursor:pointer;
+      width:100%;max-width:320px;margin-bottom:8px;-webkit-appearance:none;
+    ">📅 تفعيل أسبوع إضافي</button>`:''}
+    <button onclick="_activate(${dCode})" style="
+      background:#FFD700;color:#1A5276;border:none;border-radius:8px;
+      padding:14px 40px;font-size:16px;font-weight:bold;cursor:pointer;
+      width:100%;max-width:320px;-webkit-appearance:none;
+    ">✓ تفعيل النسخة الدائمة</button>
+    <div id="activationMsg" style="margin-top:14px;font-size:13px;min-height:20px;"></div>
+    <div style="margin-top:30px;font-size:12px;opacity:.7;">
+      للتفعيل تواصل مع المبرمج على واتساب<br>
+      <strong>01552623744</strong>
+    </div>
+  `;
+  document.body.appendChild(lockScreen);
+}
+
+// معادلة التحقق من كود التفعيل الدائم
+function _vk(c,k){
+  const _a='\x31\x37',_c='\x35\x32\x33',_d='\x31\x31\x33';
+  const _x=c,_y=Number(_a),_z=Number(_c),_w=Number(_d);
+  const _p=(_x*_y+_z)*3-_w;
+  return Number(k)===_p;
+}
+// معادلة التحقق من كود التجربة (مختلفة عن الدائم)
+function _vt(c,k){
+  const _p=(c*9+257)*2-71;
+  return Number(k)===_p;
+}
+// معادلة التحقق من كود الأسبوع الإضافي (منفصلة تمامًا عن الدائم والتجربة)
+function _ve(c,k){
+  const _p=(c*5+197)*2-59;
+  return Number(k)===_p;
+}
+
+function _activateExtension(dCode){
+  const serial = document.getElementById('serialInput').value.trim();
+  const msg = document.getElementById('activationMsg');
+  if(!serial){ msg.style.color='#FFD700'; msg.textContent='من فضلك أدخل الكود'; return; }
+  if(DB.get('am_te')){ msg.style.color='#FF6B6B'; msg.textContent='❌ الأسبوع الإضافي اتفعّل قبل كده على الجهاز ده'; return; }
+  if(_ve(dCode, serial)){
+    DB.set('am_ts', Date.now());
+    DB.set('am_te', true);
+    msg.style.color='#90EE90';
+    msg.textContent='✅ تم تفعيل أسبوع إضافي! جاري الفتح...';
+    setTimeout(()=>{
+      document.getElementById('lockScreen').remove();
+      document.querySelector('.header').style.display='';
+      document.querySelector('.tabs').style.display='';
+      document.querySelector('.body').style.display='';
+      const wm=document.querySelector('.watermark');
+      if(wm)wm.style.display='';
+      render();
+      _showTrialBanner(7);
+    },1200);
+  } else {
+    msg.style.color='#FF6B6B';
+    msg.textContent='❌ الكود غلط، تأكد من الكود وحاول تاني';
+  }
+}
+
+function _activateTrial(dCode){
+  const serial = document.getElementById('serialInput').value.trim();
+  const msg = document.getElementById('activationMsg');
+  if(!serial){ msg.style.color='#FFD700'; msg.textContent='من فضلك أدخل كود التجربة'; return; }
+  if(_vt(dCode, serial)){
+    DB.set('am_ta', serial);
+    DB.set('am_ts', Date.now());
+    msg.style.color='#90EE90';
+    msg.textContent='✅ تم تفعيل التجربة! جاري الفتح...';
+    setTimeout(()=>{
+      document.getElementById('lockScreen').remove();
+      document.querySelector('.header').style.display='';
+      document.querySelector('.tabs').style.display='';
+      document.querySelector('.body').style.display='';
+      const wm=document.querySelector('.watermark');
+      if(wm)wm.style.display='';
+      render();
+      _showTrialBanner(7);
+    },1200);
+  } else {
+    msg.style.color='#FF6B6B';
+    msg.textContent='❌ الكود غلط، تأكد من الكود وحاول تاني';
+  }
+}
+
+function _activate(dCode){
+  const serial = document.getElementById('serialInput').value.trim();
+  const msg = document.getElementById('activationMsg');
+  if(!serial){ msg.style.color='#FFD700'; msg.textContent='من فضلك أدخل كود التفعيل'; return; }
+  if(_vk(dCode, serial)){
+    DB.set('am_ak', serial);
+    DB.set('am_ta', null);
+    DB.set('am_ts', null);
+    msg.style.color='#90EE90';
+    msg.textContent='✅ تم التفعيل بنجاح! جاري الفتح...';
+    setTimeout(()=>{
+      document.getElementById('lockScreen').remove();
+      document.querySelector('.header').style.display='';
+      document.querySelector('.tabs').style.display='';
+      document.querySelector('.body').style.display='';
+      const wm=document.querySelector('.watermark');
+      if(wm)wm.style.display='';
+      const tb=document.getElementById('trialBanner');
+      if(tb) tb.remove();
+      render();
+    },1200);
+  } else {
+    msg.style.color='#FF6B6B';
+    msg.textContent='❌ الكود غلط، تأكد من الكود وحاول تاني';
+  }
+}
+
+// ===== إقلاع التطبيق =====
+document.addEventListener('DOMContentLoaded', async function(){
+  renderTabsBar();
+  await loadAllData();
+  initActivation();
+  renderCompanyBar();
+  renderWarehouseBar();
+  checkExportReminder();
+  setTimeout(()=>{ checkAutoBackup(); }, 4000);
+  setTimeout(()=>{
+    const splash=document.getElementById('splashScreen');
+    if(splash) splash.remove();
+  },2700);
+});
+
+// تسجيل السيرفس ووركر لتفعيل تثبيت التطبيق كأيقونة مستقلة (PWA)
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
